@@ -1,5 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { User } from "../domains/repositories/user.ts";
+import { WithSession } from "@fresh-session";
 
 type Error = {
     message: string;
@@ -13,7 +14,7 @@ interface Data {
   errors?: Errors;
 }
 
-export const handler: Handlers<Data> = {
+export const handler: Handlers<Data, WithSession> = {
   async POST(req, ctx) {
     const fromData= await req.formData();
     const username = fromData.get("username");
@@ -30,6 +31,7 @@ export const handler: Handlers<Data> = {
         });
     }
     return ctx.redirect("/home");
+    ctx.state.session.set("userId", user.id);
   },
 };
 
