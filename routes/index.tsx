@@ -1,9 +1,49 @@
-export default function Index() {
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { User } from "../domains/repositories/user.ts";
+
+type Error = {
+    message: string;
+}
+
+type Errors = {
+  [key: string]: Error;
+};
+
+interface Data {
+  errors?: Errors;
+}
+
+export const handler: Handlers<Data> = {
+  async POST(req, ctx) {
+    const fromData= await req.formData();
+    const username = fromData.get("username");
+
+    if (!username || typeof username != 'string' || !/[a-zA-Z0-9-_]+/.test(username)) {
+      return ctx.render({
+        errors: { username: { message: "Invalid username" } },
+      });
+    }
+    const user = User.findByUsername(username);
+    if (!user) {
+        return ctx.render({
+            errors: { username: { message: "User not found" } },
+        });
+    }
+    return ctx.redirect("/home");
+  },
+};
+
+export default function Index({ data }: PageProps<Data>) {
   return (
     <>
       <h2>Login with a random username</h2>
-      <form class="max-w-sm mx-auto">
+      <form class="max-w-sm mx-auto" method="POST">
         <div class="mb-5">
+          {data?.errors?.username && (
+            <p class="text-red-500 text-sm font-medium">
+              {data.errors.username.message}
+            </p>
+          )}
           <label
             for="username"
             class="block mb-2 text-sm font-mdeium text-gray-900 dark:text-white"
@@ -11,6 +51,7 @@ export default function Index() {
             username
           </label>
           <input
+            id="username"
             type="text"
             name="username"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
