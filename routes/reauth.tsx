@@ -1,6 +1,8 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { Handlers, PageProps  } from "$fresh/server.ts";
 import { WithSession } from "@fresh-session";
 import { User, UserEntity } from "../domains/repositories/user.ts";
+import PublicKey from "../islands/publicKey.tsx";
+import { JSX } from "preact/jsx-runtime";
 
 type Data = {
   user: UserEntity;
@@ -26,15 +28,17 @@ export const handler: Handlers<Data, WithSession> = {
         },
       });
     }
+
     return ctx.render({ user });
   },
 };
 
-export default function Reauth({ data }: PageProps<Data>) {
+export default function Reauth({ data }: PageProps<Data>): JSX.Element {
   return (
     <>
       <h2>verify your Identity</h2>
       <p>Username: {data.user.username}</p>
+      <PublicKey user={data.user} />
     </>
   );
 }
