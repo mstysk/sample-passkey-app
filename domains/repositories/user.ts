@@ -1,14 +1,14 @@
-type User = {
+export type UserEntity = {
     id: string;
     username: string;
 }
 
 interface IUser{
-    findById(id: string) : User | null;
-    findByUsername(username: string): User | null;
+    findById(id: string) : UserEntity | null;
+    findByUsername(username: string): UserEntity | null;
 }
 
-const TempUsers: User[] = [
+const TempUsers: UserEntity[] = [
     {
         id: "1",
         username: "user1"

@@ -16,6 +16,7 @@ const manifest = {
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.ts": $_middleware,
     "./routes/index.tsx": $index,
+    "./routes/reauth.tsx": $reauth,
   },
   islands: {},
   baseUrl: import.meta.url,

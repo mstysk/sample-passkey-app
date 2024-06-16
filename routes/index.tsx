@@ -30,8 +30,13 @@ export const handler: Handlers<Data, WithSession> = {
             errors: { username: { message: "User not found" } },
         });
     }
-    return ctx.redirect("/home");
     ctx.state.session.set("userId", user.id);
+    return new Response(null, {
+        status: 302,
+        headers: {
+            Location: "/reauth",
+        }
+    });
   },
 };
 
