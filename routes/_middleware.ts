@@ -6,7 +6,7 @@ export type State = {} & WithSession;
 const session = cookieSession();
 
 function sessionHandler(req: Request, ctx: FreshContext<State>) {
-    return session(req, ctx);
+  return session(req, ctx);
 }
 
 export const handler = [sessionHandler];

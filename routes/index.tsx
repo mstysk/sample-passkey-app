@@ -3,8 +3,8 @@ import { User } from "../domains/repositories/user.ts";
 import { WithSession } from "@fresh-session";
 
 type Error = {
-    message: string;
-}
+  message: string;
+};
 
 type Errors = {
   [key: string]: Error;
@@ -16,26 +16,29 @@ interface Data {
 
 export const handler: Handlers<Data, WithSession> = {
   async POST(req, ctx) {
-    const fromData= await req.formData();
+    const fromData = await req.formData();
     const username = fromData.get("username");
 
-    if (!username || typeof username != 'string' || !/[a-zA-Z0-9-_]+/.test(username)) {
+    if (
+      !username || typeof username != "string" ||
+      !/[a-zA-Z0-9-_]+/.test(username)
+    ) {
       return ctx.render({
         errors: { username: { message: "Invalid username" } },
       });
     }
     const user = User.findByUsername(username);
     if (!user) {
-        return ctx.render({
-            errors: { username: { message: "User not found" } },
-        });
+      return ctx.render({
+        errors: { username: { message: "User not found" } },
+      });
     }
     ctx.state.session.set("userId", user.id);
     return new Response(null, {
-        status: 302,
-        headers: {
-            Location: "/reauth",
-        }
+      status: 302,
+      headers: {
+        Location: "/reauth",
+      },
     });
   },
 };
