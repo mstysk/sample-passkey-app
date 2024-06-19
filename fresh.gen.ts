@@ -7,6 +7,7 @@ import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
 import * as $index from "./routes/index.tsx";
 import * as $reauth from "./routes/reauth.tsx";
+import * as $passwordForm from "./islands/passwordForm.tsx";
 import * as $reauthForm from "./islands/reauthForm.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
@@ -19,6 +20,7 @@ const manifest = {
     "./routes/reauth.tsx": $reauth,
   },
   islands: {
+    "./islands/passwordForm.tsx": $passwordForm,
     "./islands/reauthForm.tsx": $reauthForm,
   },
   baseUrl: import.meta.url,

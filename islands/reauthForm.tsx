@@ -4,6 +4,7 @@ import {
     useEffect,
     useState,
 } from "preact/hooks";
+import PasswordForm from "./passwordForm.tsx";
 
 type Props = {
     user: UserEntity;
@@ -57,14 +58,4 @@ function AuthenticatorForm({ credId }: { credId: string }): JSX.Element {
             <button type="submit">Reauth</button>
         </form>
     );
-}
-
-function PasswordForm({user}: {user: UserEntity}): JSX.Element{
-    return (
-        <form method="post" action="/home">
-            <input type="hidden" name="userId" value={user.id} />
-            <input type="password" name="password" />
-            <button type="submit">Reauth</button>
-        </form>
-    )
 }
