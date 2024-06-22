@@ -1,8 +1,9 @@
 import { Handlers } from "$fresh/server.ts";
+import { WithSession } from "@fresh-session";
 import { User, verifyPassword } from "../../domains/repositories/user.ts";
 
-export const handler: Handlers = {
-  async POST(req) {
+export const handler: Handlers<undefined, WithSession> = {
+  async POST(req, ctx) {
     const form = await req.formData();
     const { password, userId } = Object.fromEntries(form);
 
@@ -25,6 +26,7 @@ export const handler: Handlers = {
         statusText: "Unauthorized",
       });
     }
+    ctx.state.session.set("user", user);
     return new Response(null, {
       status: 201,
     });

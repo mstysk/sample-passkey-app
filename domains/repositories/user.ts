@@ -47,3 +47,14 @@ const UserWithPassowrd = [
     password: "password2",
   },
 ];
+
+export const isUserEntity = (user: unknown): user is UserEntity => {
+    return (
+        typeof user === "object" &&
+        user !== null &&
+        "id" in user &&
+        typeof (user as UserEntity).id === "string" &&
+        "username" in user &&
+        typeof (user as UserEntity).username === "string"
+    );
+}
