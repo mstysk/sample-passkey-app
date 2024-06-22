@@ -26,10 +26,7 @@ export const handler: Handlers = {
       });
     }
     return new Response(null, {
-      status: 302,
-      headers: {
-        Location: "/home",
-      },
+      status: 201,
     });
   },
 };
