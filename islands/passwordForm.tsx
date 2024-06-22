@@ -40,7 +40,7 @@ export default function PasswordForm({ user }: Props): JSX.Element {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form class="max-w-sm mx-auto"  onSubmit={handleSubmit}>
         <Label for="password">Password</Label>
         <Input type="hidden" name="userId" value={user.id} />
         <Input type="password" name="password" onInput={handleInput} />

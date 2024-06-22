@@ -49,7 +49,7 @@ function Loading() {
 
 function AuthenticatorForm({ credId }: { credId: string }): JSX.Element {
   return (
-    <form>
+    <form class="max-w-sm mx-auto" method="POST">
       {/** @TODO **/}
       <input type="hidden" name="credId" value={credId} />
       <button type="submit">Reauth</button>
