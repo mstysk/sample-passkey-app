@@ -1,6 +1,6 @@
 import { Handlers } from "$fresh/server.ts";
 import { WithSession } from "@fresh-session";
-import { User, verifyPassword } from "../../domains/repositories/user.ts";
+import { User, verifyPassword } from "../../domains/repositories/index.ts";
 
 export const handler: Handlers<undefined, WithSession> = {
   async POST(req, ctx) {
@@ -13,19 +13,21 @@ export const handler: Handlers<undefined, WithSession> = {
         statusText: "Bad Request",
       });
     }
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return new Response(null, {
         status: 404,
         statusText: "Not Found",
       });
     }
-    if (!verifyPassword(user, password)) {
+    const ret = await verifyPassword(user, password);
+    if (!ret) {
       return new Response(null, {
         status: 401,
         statusText: "Unauthorized",
       });
     }
+    console.log("verified", user, password);
     ctx.state.session.set("user", user);
     return new Response(null, {
       status: 201,

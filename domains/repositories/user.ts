@@ -1,60 +1,57 @@
-export type UserEntity = {
-  id: string;
-  username: string;
+import { UserEntity, UserPasswordEntity } from "../types/user.ts";
+
+const kv = await Deno.openKv();
+
+const tmpUser: UserEntity = {
+  id: "1",
+  username: "user1",
+} as const;
+
+const tmpUserPassword: UserPasswordEntity = {
+  userId: tmpUser.id,
+  passwordHash: "password1",
+} as const;
+
+await kv.set(["users", tmpUser.username], tmpUser);
+await kv.set(["users.password", tmpUserPassword.userId], tmpUserPassword);
+
+export const User = {
+  async findByUsername(username: string) {
+    const user = await kv.get(["users", username]);
+    console.log(user);
+    if (user.value) {
+      return user.value as UserEntity;
+    }
+    return null;
+  },
+
+  async findById(id: string) {
+    const user = await kv.get<UserEntity>(["users", id]);
+    if (user.value) {
+      return user.value as UserEntity;
+    }
+    return null;
+  },
+
+  async store(user: UserEntity, password: string) {
+    const userWithPassword = {
+      user,
+      password,
+    };
+    await kv.set(["users", user.username], userWithPassword);
+  },
 };
 
-interface IUser {
-  findById(id: string): UserEntity | null;
-  findByUsername(username: string): UserEntity | null;
-}
+export async function verifyPassword(
+  user: UserEntity,
+  password: string,
+): Promise<boolean> {
+  const p = await kv.get<UserPasswordEntity>(["users.password", user.id]);
+  console.log(p);
 
-const TempUsers: UserEntity[] = [
-  {
-    id: "1",
-    username: "user1",
-  },
-  {
-    id: "2",
-    username: "user2",
-  },
-];
-
-export const User: IUser = {
-  findById(id: string) {
-    return TempUsers.find((user) => user.id === id) || null;
-  },
-
-  findByUsername(username: string) {
-    return TempUsers.find((user) => user.username === username) || null;
-  },
-};
-
-export function verifyPassword(user: UserEntity, password: string) {
-  const userWithPassword = UserWithPassowrd.find((u) => u.user.id === user.id);
-  if (!userWithPassword) {
+  if (!p.value) {
     return false;
   }
-  return userWithPassword.password === password;
-}
 
-const UserWithPassowrd = [
-  {
-    user: TempUsers[0],
-    password: "password1",
-  },
-  {
-    user: TempUsers[1],
-    password: "password2",
-  },
-];
-
-export const isUserEntity = (user: unknown): user is UserEntity => {
-    return (
-        typeof user === "object" &&
-        user !== null &&
-        "id" in user &&
-        typeof (user as UserEntity).id === "string" &&
-        "username" in user &&
-        typeof (user as UserEntity).username === "string"
-    );
+  return password === p.value.passwordHash;
 }

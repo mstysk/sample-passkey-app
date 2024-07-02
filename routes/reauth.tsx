@@ -1,15 +1,16 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
-import { WithSession } from "@fresh-session";
-import { User, UserEntity } from "../domains/repositories/user.ts";
+import { User } from "../domains/repositories/index.ts";
+import { UserEntity } from "../domains/repositories/user_types.ts";
 import { JSX } from "preact/jsx-runtime";
 import ReauthForm from "../islands/reauthForm.tsx";
+import { WithSession } from "@fresh-session";
+import { Handlers } from "$fresh/server.ts";
 
 type Data = {
   user: UserEntity;
 };
 
 export const handler: Handlers<Data, WithSession> = {
-  GET(_, ctx) {
+  async GET(_, ctx) {
     const userId = ctx.state.session.get("userId");
     if (!userId) {
       return new Response(null, {
@@ -19,7 +20,7 @@ export const handler: Handlers<Data, WithSession> = {
         },
       });
     }
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return new Response(null, {
         status: 302,

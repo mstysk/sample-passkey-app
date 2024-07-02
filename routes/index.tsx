@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Input, Label, Button } from "../components/index.ts";
-import { User } from "../domains/repositories/user.ts";
+import { User } from "../domains/repositories/index.ts";
 import { WithSession } from "@fresh-session";
 
 type Error = {
@@ -28,12 +28,14 @@ export const handler: Handlers<Data, WithSession> = {
         errors: { username: { message: "Invalid username" } },
       });
     }
-    const user = User.findByUsername(username);
+    const user = await User.findByUsername(username);
+    console.log(user);
     if (!user) {
       return ctx.render({
         errors: { username: { message: "User not found" } },
       });
     }
+    console.log('isset');
     ctx.state.session.set("userId", user.id);
     return new Response(null, {
       status: 302,
