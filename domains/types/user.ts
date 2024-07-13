@@ -16,3 +16,8 @@ export interface IUser {
   findById(id: UserId): UserEntity | null;
   findByUsername(username: string): UserEntity | null;
 }
+
+export const isUserEntity = (u: any): u is UserEntity => {
+  return "id" in u && "username" in u;
+};
+

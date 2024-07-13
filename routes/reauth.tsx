@@ -1,5 +1,5 @@
 import { User } from "../domains/repositories/index.ts";
-import { UserEntity } from "../domains/repositories/user_types.ts";
+import { UserEntity } from "../domains/types/user.ts";
 import { JSX } from "preact/jsx-runtime";
 import ReauthForm from "../islands/reauthForm.tsx";
 import { WithSession } from "@fresh-session";
