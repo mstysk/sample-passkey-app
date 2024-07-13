@@ -1,4 +1,4 @@
-import { UserEntity, UserPasswordEntity } from "../types/user.ts";
+import { UserEntity, UserEntityWithPassword, UserPasswordEntity } from "../types/user.ts";
 
 const kv = await Deno.openKv();
 
@@ -33,12 +33,8 @@ export const User = {
     return null;
   },
 
-  async store(user: UserEntity, password: string) {
-    const userWithPassword = {
-      user,
-      password,
-    };
-    await kv.set(["users", user.username], userWithPassword);
+  async store(user: UserEntityWithPassword) {
+    await kv.set(["users", user.username], user);
   },
 };
 

@@ -9,6 +9,7 @@ import * as $api_password from "./routes/api/password.ts";
 import * as $home from "./routes/home.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $reauth from "./routes/reauth.tsx";
+import * as $users_create from "./routes/users/create.tsx";
 import * as $passwordForm from "./islands/passwordForm.tsx";
 import * as $reauthForm from "./islands/reauthForm.tsx";
 import { type Manifest } from "$fresh/server.ts";
@@ -22,6 +23,7 @@ const manifest = {
     "./routes/home.tsx": $home,
     "./routes/index.tsx": $index,
     "./routes/reauth.tsx": $reauth,
+    "./routes/users/create.tsx": $users_create,
   },
   islands: {
     "./islands/passwordForm.tsx": $passwordForm,
