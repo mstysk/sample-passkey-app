@@ -34,6 +34,11 @@ export const User = {
   },
 
   async store(user: UserEntityWithPassword) {
+    const u = await this.findByUsername(user.username);
+    console.log("find", u);
+    if (u) {
+      throw new Error("User already exists");
+    }
     await kv.set(["users", user.username], user);
   },
 };
